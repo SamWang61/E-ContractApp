@@ -1,5 +1,7 @@
 # E-ContractApp
 
+> **使用說明手冊**：[firebase/docs/USER_MANUAL.md](firebase/docs/USER_MANUAL.md)（[PDF 版](firebase/docs/USER_MANUAL.pdf)）
+
 > 全球化合約管理系統／Global Contract Management System
 
 E-ContractApp provides a secure, multi-party contract-signing workflow with email invitations, per-signer links, one-time tokens, expiry governance, reminders, rejection, and change requests.
