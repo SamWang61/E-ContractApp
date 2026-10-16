@@ -1,0 +1,9 @@
+firebase-functions>=0.4.0
+firebase-admin>=6.5.0
+cryptography>=43.0.0
+google-auth>=2.29.0
+requests>=2.31.0
+opencc-python-reimplemented==0.1.7
+pypdf>=4.2.0
+python-docx>=1.1.0
+fpdf2>=2.8.0

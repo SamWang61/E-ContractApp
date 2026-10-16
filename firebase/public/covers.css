@@ -1,0 +1,98 @@
+/* ---------- 補充元件 ---------- */
+textarea{width:100%;box-sizing:border-box;font:inherit;padding:10px 12px;border:1px solid #cfd8e6;border-radius:10px;resize:vertical}
+select{font:inherit;padding:9px 10px;border:1px solid #cfd8e6;border-radius:10px;background:#fff}
+.seg{display:flex;gap:6px;flex-wrap:wrap}
+.seg label,.seg button{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid #cfd8e6;border-radius:999px;background:#fff;color:#172033;font-size:14px;cursor:pointer;font-weight:600}
+.seg button.on{background:#172033;color:#fff;border-color:#172033}
+.signer-row{display:grid;grid-template-columns:1fr 2fr;gap:12px;margin-bottom:10px}
+.row-btns{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 4px}
+button.danger{background:#d92d20}
+.sign-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.tag{display:inline-block;padding:4px 10px;border-radius:999px;background:#eef2f8;color:#344054;font-size:13px}
+canvas#sig{display:block;width:100%;height:auto;margin-top:7px;border:1px dashed #9badc8;border-radius:10px;background:#fff;touch-action:none;cursor:crosshair}
+.parties{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.party{margin:0}
+.party-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.role{font-weight:700}
+.link-box{font-family:ui-monospace,Menlo,monospace;font-size:12px;word-break:break-all;background:#f5f7fb;border-radius:8px;padding:8px;margin:6px 0}
+.status.pending,.status.invited{background:#e9efff;color:#2a56bd}
+.status.signed,.status.completed,.status.fully_signed{background:#dff6e9;color:#147642}
+.status.partially_signed{background:#e6f4ff;color:#175cd3}
+.status.declined{background:#fde4e1;color:#b42318}
+.status.changes_requested{background:#fff0d6;color:#9a5b00}
+.status.expired,.status.draft{background:#eceff4;color:#667085}
+.done{background:#e9f7ef;border:1px solid #a6dcbc;color:#145c36;border-radius:12px;padding:14px 16px;line-height:1.7}
+.bad{background:#fde4e1;border:1px solid #f3b3ab;color:#8a1c12;border-radius:12px;padding:14px 16px;line-height:1.7}
+.doc-box{border:1px solid #dbe3ef;border-radius:12px;padding:12px 14px;margin:12px 0;background:#fafcff}
+.doc-text{white-space:pre-wrap;max-height:260px;overflow:auto;font-size:14px;line-height:1.7;color:#344054;margin-top:8px}
+.contract-body{white-space:pre-wrap;line-height:1.85;font-size:15px;color:#172033;border-left:3px solid #dbe3ef;padding:4px 0 4px 14px;margin:12px 0}
+.site-foot{max-width:1120px;margin:0 auto 32px;padding:0 20px;text-align:center;color:#7b879b;font-size:12px;line-height:1.8}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#172033;color:#fff;padding:10px 16px;border-radius:10px;opacity:0;transition:opacity .2s;pointer-events:none;z-index:9}
+.toast.show{opacity:1}
+@media (max-width:640px){.signer-row,.form-grid{grid-template-columns:1fr!important}}
+
+/* ---------- 封面選擇 ---------- */
+.cover-picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
+.cover-option{border:2px solid transparent;border-radius:14px;padding:4px;background:none;cursor:pointer;text-align:left;color:#172033}
+.cover-option.on{border-color:#2a56bd}
+.cover-option span{display:block;font-size:13px;font-weight:600;margin:6px 4px 2px}
+.cover-option .cover{aspect-ratio:3/4;font-size:7px;padding:10% 9%}
+
+/* ---------- 封面本體（A4 直式比例） ---------- */
+.cover{position:relative;overflow:hidden;border-radius:10px;aspect-ratio:210/297;max-width:420px;margin:0 auto 16px;padding:12% 10%;box-sizing:border-box;display:flex;flex-direction:column;font-size:14px;box-shadow:0 6px 24px rgba(23,32,51,.14)}
+.cover .c-brand{letter-spacing:.24em;font-size:.72em;font-weight:700;opacity:.85}
+.cover .c-kind{margin-top:auto;font-size:.8em;letter-spacing:.3em;opacity:.8}
+.cover .c-title{font-size:2em;font-weight:800;line-height:1.25;margin:.35em 0 .5em}
+.cover .c-sum{font-size:.85em;line-height:1.6;opacity:.85}
+.cover .c-parties{margin-top:1.4em;display:flex;flex-direction:column;gap:.35em;font-size:.82em}
+.cover .c-foot{margin-top:auto;display:flex;justify-content:space-between;font-size:.72em;opacity:.8;padding-top:1.2em;border-top:1px solid currentColor}
+
+.cover.classic-navy{background:linear-gradient(160deg,#0f1f3d,#1d3561);color:#f4f6fb}
+.cover.classic-navy::after{content:"";position:absolute;inset:4%;border:1px solid rgba(255,255,255,.35);border-radius:6px;pointer-events:none}
+.cover.business-gold{background:#16130d;color:#e9d29a}
+.cover.business-gold::before{content:"";position:absolute;left:0;right:0;top:0;height:6%;background:linear-gradient(90deg,#b8913a,#f1d88b,#b8913a)}
+.cover.business-gold::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2%;background:#b8913a}
+.cover.minimal-white{background:#fff;color:#172033;border:1px solid #dbe3ef}
+.cover.minimal-white::before{content:"";position:absolute;left:10%;top:9%;width:18%;height:3px;background:#172033}
+.cover.tech-blue{background:radial-gradient(120% 80% at 100% 0%,#3b82f6 0,#1e3a8a 45%,#0b1530 100%);color:#e8f0ff}
+.cover.tech-blue::after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.06) 1px,transparent 1px);background-size:22px 22px;pointer-events:none}
+.cover.jade-green{background:linear-gradient(180deg,#f3f7f2,#e3eee4);color:#1f3d2b}
+.cover.jade-green::before{content:"";position:absolute;right:-18%;top:-12%;width:70%;aspect-ratio:1;border-radius:50%;background:#2f6b4a;opacity:.14}
+.cover.crimson-seal{background:#fbf7f1;color:#2b1d14}
+.cover.crimson-seal::before{content:"約";position:absolute;right:9%;top:8%;width:15%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:#b42318;color:#fff;font-weight:800;font-size:1.6em;border-radius:6px;transform:rotate(-6deg)}
+.cover.crimson-seal::after{content:"";position:absolute;left:0;top:0;bottom:0;width:3%;background:#b42318}
+.cover > *{position:relative;z-index:1}
+
+/* ---- 導覽列、合約清單、合約內容頁 ---- */
+.top-nav { display: flex; gap: 8px; max-width: 1100px; margin: 0 auto; padding: 10px 20px 0; flex-wrap: wrap; }
+.top-nav a { padding: 8px 16px; border-radius: 999px; border: 1px solid #cbd5e1; color: #172033; text-decoration: none; font-weight: 600; background: #fff; }
+.top-nav a.on { background: #172033; color: #fff; border-color: #172033; }
+.search-grid { grid-template-columns: 3fr 1fr; }
+.contract-table { margin-top: 12px; display: grid; gap: 8px; }
+.c-row { display: grid; grid-template-columns: 130px 1fr 150px 120px; gap: 12px; align-items: center; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; background: #fff; }
+.c-row:hover { border-color: #1e3a8a; box-shadow: 0 2px 10px rgba(30, 58, 138, .08); }
+.c-row .no { font-weight: 700; font-family: ui-monospace, Menlo, Consolas, monospace; }
+.c-row .t { font-weight: 600; }
+.c-row .sub { color: #64748b; font-size: 13px; margin-top: 2px; word-break: break-all; }
+.c-row .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 6px; vertical-align: middle; }
+.no-edit { display: flex; gap: 10px; align-items: end; flex-wrap: wrap; }
+.no-edit label { max-width: 260px; }
+@media (max-width: 720px) {
+  .search-grid { grid-template-columns: 1fr; }
+  .c-row { grid-template-columns: 1fr; gap: 4px; }
+}
+.c-row { grid-template-columns: 130px 1fr 190px 120px; }
+.c-row > .sub { white-space: nowrap; }
+.no-edit a.btn { display: inline-flex; align-items: center; padding: 10px 16px; border-radius: 10px; border: 1px solid #cbd5e1; background: #fff; color: #172033; text-decoration: none; font-weight: 600; }
+
+/* 簽署方公司資料 */
+.signer-card { grid-template-columns: 1fr 2fr 2fr 1fr; padding: 14px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fafbfd; }
+.signer-card .wide { grid-column: span 3; }
+.party-co { margin: 4px 0; font-size: 14px; color: #172033; }
+.cover .c-parties small { opacity: .8; font-size: .85em; }
+@media (max-width: 720px) { .signer-card { grid-template-columns: 1fr !important; } .signer-card .wide { grid-column: auto; } }
+
+.site-foot a { color: inherit; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+.site-foot a:hover { color: #2563eb; }
+
+.notice-line { margin: 8px 0; font-size: 14px; color: #0f5132; }

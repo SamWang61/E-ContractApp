@@ -1,0 +1,17 @@
+rules_version = '2';
+// MyContractApp 安全規則（2026-10-16）
+// 網站前端「不直接」讀寫 Firestore；合約、簽署邀請、稽核資料一律經由後端 API（Cloud Functions，
+// Admin SDK 不受此規則限制）驗證登入身分與合約擁有者後才存取。
+// 因此前端直接存取全部拒絕：即使有人拿到網站的公開 API Key，也讀不到任何合約資料。
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // 使用者只能讀寫自己的個人設定文件
+    match /users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+    // 其他所有路徑（tenants、contracts、signatureInvites、auditLogs、payments…）一律拒絕
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

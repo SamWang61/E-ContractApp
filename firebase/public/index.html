@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>全球化合約管理系統｜線上簽約</title>
+<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="/covers.css">
+</head>
+<body>
+<header>
+  <div>
+    <div class="eyebrow">GLOBAL CONTRACT MANAGEMENT</div>
+    <h1>全球化合約管理系統</h1>
+    <p id="head-sub">建立合約、上傳文件、選擇封面、多語翻譯，並以一次性連結完成兩方／三方電子簽署。</p>
+  </div>
+  <span id="conn-badge" class="demo-badge">連線中…</span>
+</header>
+<nav id="top-nav" class="top-nav" hidden>
+  <a href="/" data-nav="new">建立合約</a>
+  <a href="/contracts" data-nav="list">瀏覽所有合約</a>
+</nav>
+
+<main>
+  <!-- ======================= 管理台 ======================= -->
+  <section id="manager-page" hidden>
+    <div class="card">
+      <div class="section-title"><div><span class="step">STEP 1</span><h2>合約內容</h2></div></div>
+      <div class="form-grid" style="grid-template-columns:1fr 2fr 1fr">
+        <label>合約編號（預設自動編號，可修改）<input id="c-no" maxlength="40" placeholder="C-YYMM001" autocomplete="off"></label>
+        <label>合約名稱<input id="c-title" maxlength="120" value="全球服務合作合約"></label>
+        <label>原文語言
+          <select id="c-lang"><option value="zh-TW">繁體中文</option><option value="zh-CN">簡體中文</option><option value="en">English</option></select>
+        </label>
+      </div>
+      <label>摘要<input id="c-summary" maxlength="2000" value="雙方就跨國服務合作之範圍、費用與保密義務達成協議。"></label>
+      <label>合約條款（可留白，改以上傳文件為準）<textarea id="c-body" rows="7" maxlength="60000">第一條　合作範圍：甲方委託乙方提供跨國軟體導入與維運服務。
+第二條　服務費用：每月新臺幣壹拾萬元整，於次月十日前支付。
+第三條　保密義務：雙方對因本合約知悉之營業秘密負保密責任，期間至合約終止後三年。
+第四條　準據法：本合約以中華民國法律為準據法。</textarea></label>
+      <label>上傳合約文件（PDF、Word .docx、TXT、PNG、JPG，10 MB 內）
+        <input id="c-file" type="file" accept=".pdf,.docx,.txt,.png,.jpg,.jpeg,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,image/png,image/jpeg">
+      </label>
+      <p id="file-info" class="muted"></p>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><div><span class="step">STEP 2</span><h2>選擇合約封面（由起約方決定）</h2></div></div>
+      <div id="cover-picker" class="cover-picker"></div>
+    </div>
+
+    <div class="card">
+      <div class="section-title"><div><span class="step">STEP 3</span><h2>簽署方</h2></div>
+        <div class="seg"><label><input type="radio" name="parties" value="2" checked> 兩方</label><label><input type="radio" name="parties" value="3"> 三方</label></div>
+      </div>
+      <div id="signer-rows"></div>
+      <label style="max-width:240px">簽署期限（天）<input id="c-days" type="number" min="1" max="90" value="7"></label>
+      <div class="row-btns"><button id="create-btn">建立合約並預覽</button></div>
+      <p id="create-msg" class="error"></p>
+    </div>
+
+    <div class="card" id="preview-card" hidden>
+      <div class="section-title"><div><span class="step">STEP 4</span><h2>預覽與翻譯</h2></div>
+        <div class="seg lang-tabs" id="owner-lang"></div>
+      </div>
+      <div id="owner-preview"></div>
+      <div class="row-btns"><button id="send-btn">發送簽署邀請</button></div>
+      <p id="send-msg" class="error"></p>
+    </div>
+
+    <div class="card" id="track-card" hidden>
+      <div class="section-title"><div><span class="step">STEP 5</span><h2 id="track-title">簽署進度</h2></div><span id="contract-status" class="status"></span></div>
+      <div id="contract-state" class="muted"></div>
+      <div id="parties" class="parties"></div>
+    </div>
+
+    <div class="card" id="history-card" hidden>
+      <div class="section-title"><div><span class="step">HISTORY</span><h2>此瀏覽器建立的合約</h2></div></div>
+      <div id="history"></div>
+    </div>
+  </section>
+
+  <!-- ======================= 簽署頁 ======================= -->
+  <!-- ======================= 瀏覽所有合約 ======================= -->
+  <section id="list-page" hidden>
+    <div class="card">
+      <div class="section-title"><div><span class="step">CONTRACTS</span><h2>瀏覽所有合約</h2></div><span id="list-count" class="muted"></span></div>
+      <div class="form-grid search-grid">
+        <label>查詢（合約編號、名稱、摘要、公司名稱、統編、代表人、Email）<input id="q" type="search" placeholder="例如 C-2610001、採購、全球科技、04595257" autocomplete="off"></label>
+        <label>狀態
+          <select id="q-status">
+            <option value="">全部狀態</option><option value="draft">草稿</option><option value="invited">已發出邀請</option>
+            <option value="partially_signed">部分簽署</option><option value="fully_signed">已全數簽署</option>
+            <option value="declined">已被拒絕</option><option value="changes_requested">待修改</option>
+          </select>
+        </label>
+      </div>
+      <div id="list-body" class="contract-table"><p class="muted">載入中…</p></div>
+    </div>
+  </section>
+
+  <!-- ======================= 合約內容 ======================= -->
+  <section id="detail-page" hidden>
+    <div class="card">
+      <div class="section-title">
+        <div><span class="step" id="d-no-label">CONTRACT</span><h2 id="d-title">載入合約中…</h2></div>
+        <span id="d-status" class="status"></span>
+      </div>
+      <div class="no-edit">
+        <label>合約編號<input id="d-no" maxlength="40" autocomplete="off"></label>
+        <button id="d-no-save" class="secondary" type="button">儲存編號</button>
+        <a class="btn secondary" href="/contracts">回合約清單</a>
+      </div>
+      <p id="d-msg" class="muted"></p>
+      <div id="d-actions" class="row-btns"></div>
+    </div>
+    <div class="card">
+      <div class="section-title"><div><span class="step">CONTENT</span><h2>合約內容</h2></div><div class="seg lang-tabs" id="d-lang"></div></div>
+      <div id="d-content"></div>
+    </div>
+    <div class="card">
+      <div class="section-title"><div><span class="step">PARTIES</span><h2>簽署方與進度</h2></div></div>
+      <div id="d-parties" class="parties"></div>
+    </div>
+  </section>
+
+  <section id="signing-page" hidden>
+    <div class="card">
+      <div class="section-title"><div><span class="step">SIGNING</span><h2 id="sign-title">載入簽署邀請中…</h2></div>
+        <div class="seg lang-tabs" id="sign-lang"></div>
+      </div>
+      <div id="sign-state"></div>
+      <div id="sign-view" hidden>
+        <div class="sign-meta"><span id="sign-role" class="tag"></span><span id="sign-email" class="tag"></span><span id="sign-expiry" class="tag"></span></div>
+        <div id="sign-preview"></div>
+        <div id="sign-form">
+          <div class="form-grid" style="grid-template-columns:1fr 1fr">
+            <label>簽署人姓名<input id="sign-name" autocomplete="name" maxlength="80" placeholder="請輸入姓名"></label>
+            <label>備註／原因<input id="sign-reason" maxlength="500" placeholder="退回或拒絕時必填"></label>
+          </div>
+          <label>手寫簽名（確認簽署時必填，可用手指或滑鼠）<canvas id="sig" width="640" height="160"></canvas></label>
+          <div class="row-btns"><button id="sig-clear" class="secondary" type="button">清除簽名</button></div>
+          <label class="consent-row"><input id="sign-consent" type="checkbox"> 我已閱讀合約內容，並同意以電子方式處理本次簽署。</label>
+          <div class="row-btns">
+            <button id="sign-action">確認簽署</button>
+            <button id="change-action" class="secondary">退回修改</button>
+            <button id="decline-action" class="danger">拒絕簽署</button>
+          </div>
+          <p id="sign-result" class="error"></p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="toast" class="toast"></div>
+<footer class="site-foot">合約與簽署紀錄保存於 Firebase（mycontractapp-911）｜簽署連結使用一次後立即失效｜<a href="https://xsh0p.ai" target="_blank" rel="noopener noreferrer">X Shop AI Labs.</a></footer>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

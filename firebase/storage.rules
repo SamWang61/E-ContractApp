@@ -1,0 +1,9 @@
+rules_version = '2';
+// 合約文件與手寫簽名只由後端（Admin SDK）存取；前端一律不可直接讀寫。
+service firebase.storage {
+  match /b/{bucket}/o {
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

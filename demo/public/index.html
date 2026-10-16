@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="description" content="全球化合約管理系統線上簽約示範：免登入，一鍵產生甲乙丙三方一次性簽署連結。示範模式・不具法律效力。">
+<title>全球化合約管理系統｜線上簽約示範</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.demo-banner{background:#fff7e0;border:1px solid #f1d58a;color:#7a5600;border-radius:12px;padding:12px 16px;margin-bottom:20px;font-size:14px;line-height:1.7}
+.party{display:flex;flex-direction:column;gap:10px}
+.party-head{display:flex;justify-content:space-between;align-items:center}
+.party .role{font-weight:800;font-size:17px}
+.link-box{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;background:#f1f5fb;border:1px solid #dce3ee;border-radius:8px;padding:8px;word-break:break-all;max-height:62px;overflow:hidden;color:#53617a}
+.row-btns{display:flex;gap:8px;flex-wrap:wrap}
+.row-btns a.btn,.row-btns button{font-size:13px;padding:8px 12px}
+a.btn{display:inline-block;background:#2764e8;color:#fff;border-radius:9px;font-weight:700;text-decoration:none}
+a.btn.secondary{background:#edf2fb;color:#172033}
+.status.signed{background:#dff6e9;color:#147642}
+.status.declined{background:#fde4e1;color:#b42318}
+.status.changes_requested{background:#fff0d6;color:#9a5b00}
+.status.expired{background:#eceff4;color:#667085}
+.status.pending{background:#e9efff;color:#2a56bd}
+.log{max-height:260px;overflow:auto;font-size:13px;line-height:1.8;color:#53617a;margin:0;padding-left:18px}
+.mail{white-space:pre-wrap;background:#fbfcff;border:1px dashed #b8cafa;border-radius:10px;padding:12px;font-size:13px;color:#33415c;margin:8px 0 0}
+details summary{cursor:pointer;color:#2764e8;font-weight:700;font-size:13px}
+.big-cta{font-size:16px;padding:14px 22px}
+.contract-state{font-size:15px;margin:0 0 14px}
+.sig-wrap small{color:#7b879b;font-weight:400}
+.sig-wrap canvas{display:block;width:100%;height:auto;margin-top:7px;border:1px dashed #9badc8;border-radius:10px;background:#fff;touch-action:none;cursor:crosshair}
+header{flex-wrap:wrap;gap:12px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#172033;color:#fff;border-radius:99px;padding:10px 18px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}
+.toast.show{opacity:1}
+.site-foot{max-width:1120px;margin:0 auto 32px;padding:0 20px;text-align:center;color:#7b879b;font-size:12px;line-height:1.8}
+.sign-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="eyebrow">GLOBAL CONTRACT OPERATIONS</div>
+    <h1>全球化合約管理系統</h1>
+    <p>線上簽約示範：邀請、簽署、退回修改，一條流程搞定（紙本不再旅行）。</p>
+  </div>
+  <span class="demo-badge">示範模式</span>
+</header>
+<main>
+  <!-- 管理者視角 -->
+  <section id="manager-page">
+    <div class="demo-banner">
+      <b>這是示範模式。</b>不需登入，資料只存在這台裝置的瀏覽器裡，<b>不會寫入正式資料庫，也不會真的寄信</b>。
+      簽署連結可以傳給別人（手機、另一台電腦）打開體驗簽署畫面；但「簽署進度」只會在<b>同一個瀏覽器</b>的這個頁面更新。
+    </div>
+
+    <section class="card">
+      <div class="section-title"><div><span class="step">1 · CONTRACT</span><h2>建立示範合約</h2></div></div>
+      <div class="form-grid">
+        <label>合約名稱<input id="d-title" value="全球服務合作合約"></label>
+        <label>簽署期限<select id="d-days"><option value="7" selected>7 天內</option><option value="3">3 天內</option><option value="14">14 天內</option><option value="30">30 天內</option></select></label>
+        <label>簽署方數<select id="d-parties"><option value="2">兩方（甲、乙）</option><option value="3" selected>三方（甲、乙、丙）</option></select></label>
+        <label>合約摘要<input id="d-summary" value="三方合作：甲方提供平台，乙方提供在地服務，丙方負責合規審閱。"></label>
+      </div>
+      <div class="form-actions">
+        <button id="gen" class="big-cta">一鍵產生測試簽署連結</button>
+        <button id="reset" class="secondary">重設示範</button>
+        <a class="btn secondary" href="live.html" style="padding:12px 18px">前往正式簽約管理台 →</a>
+      </div>
+      <p class="muted" id="gen-msg"></p>
+    </section>
+
+    <section class="card" id="parties-card" hidden>
+      <div class="section-title"><div><span class="step">2 · INVITE</span><h2>簽署邀請</h2></div><span id="contract-status" class="status draft"></span></div>
+      <p id="contract-state" class="contract-state"></p>
+      <div id="parties" class="grid"></div>
+      <p class="legal-note">示範用途：此流程示範一次性連結、電子簽署同意、退回修改與拒絕的完整狀態變化，不具法律效力。</p>
+    </section>
+
+    <section class="card" id="remind-card" hidden>
+      <div class="section-title"><div><span class="step">3 · REMIND</span><h2>逾期與提醒</h2></div></div>
+      <p>正式環境由 Cloud Scheduler 每日呼叫提醒 API，只提醒「仍待簽署且兩日內到期」的邀請。這裡可以手動模擬：</p>
+      <div class="form-actions">
+        <button id="remind" class="secondary">模擬到期提醒（先把期限縮到 1 天）</button>
+        <button id="expire" class="secondary">模擬逾期（待簽連結立即失效）</button>
+      </div>
+      <p id="remind-msg" class="muted"></p>
+      <div id="remind-mails"></div>
+    </section>
+
+    <section class="card" id="log-card" hidden>
+      <div class="section-title"><div><span class="step">4 · AUDIT</span><h2>操作紀錄</h2></div></div>
+      <ol id="log" class="log"></ol>
+    </section>
+
+    <section class="card presenter">
+      <span class="step">DEMO SCRIPT</span>
+      <h2>三分鐘簡報流程</h2>
+      <ol>
+        <li>按「一鍵產生三方測試連結」，說明三方各拿到專屬、一次性的簽署連結。</li>
+        <li>甲方：開新分頁 → 填姓名、勾同意 → 確認簽署，回到本頁看進度變成 1/3。</li>
+        <li>乙方：示範「退回修改」（必填原因），合約狀態轉為待修改。</li>
+        <li>丙方：示範「拒絕簽署」，或重設後三方全部簽完，看到「已全數簽署」。</li>
+        <li>重新開啟已使用的連結，示範「此 Token 已失效」。最後按「模擬逾期」收尾。</li>
+      </ol>
+    </section>
+  </section>
+
+  <!-- 簽署人視角 -->
+  <section id="signing-page" class="card" hidden>
+    <div class="section-title"><div><span class="step">SECURE SIGNING</span><h2 id="sign-title">載入專屬簽署邀請</h2></div><span id="sign-expiry" class="status draft"></span></div>
+    <div class="sign-meta"><span id="sign-role" class="tag"></span><span class="tag">示範模式・不具法律效力</span></div>
+    <p id="sign-summary" class="muted"></p>
+    <div class="form-grid" style="grid-template-columns:1fr 1fr">
+      <label>簽署人姓名<input id="sign-name" autocomplete="name" placeholder="請輸入姓名"></label>
+      <label>簽署備註／原因<input id="sign-reason" placeholder="拒絕或退回時請說明原因"></label>
+    </div>
+    <div class="sig-wrap"><label>手寫簽名 <small>（確認簽署時必填，用手指或滑鼠簽）</small><canvas id="sig" width="640" height="160"></canvas></label>
+      <div class="signature-tools"><span></span><button id="sig-clear" class="secondary" type="button">清除簽名</button></div></div>
+    <label class="consent-row"><input id="sign-consent" type="checkbox"> 我已閱讀合約內容，並同意以電子方式處理本次簽署。</label>
+    <div class="signature-tools">
+      <button id="sign-action">確認簽署</button>
+      <button id="change-action" class="secondary">退回修改</button>
+      <button id="decline-action" class="danger" style="background:#d92d20">拒絕簽署</button>
+    </div>
+    <p id="sign-result" class="error"></p>
+  </section>
+</main>
+<footer class="site-foot">示範模式・不具法律效力｜資料僅儲存於本機瀏覽器，不寫入資料庫、不實際寄信</footer>
+<div id="toast" class="toast"></div>
+<script src="demo.js"></script>
+</body>
+</html>

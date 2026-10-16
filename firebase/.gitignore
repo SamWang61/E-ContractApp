@@ -1,0 +1,7 @@
+functions/venv/
+functions/.env
+functions/.env.local
+__pycache__/
+*.pyc
+.firebase/
+*-debug.log

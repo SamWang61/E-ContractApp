@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<meta name="referrer" content="no-referrer">
+<title>合約簽署｜全球化合約管理系統</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.sign-meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.sig-wrap small{color:#7b879b;font-weight:400}
+.sig-wrap canvas{display:block;width:100%;height:auto;margin-top:7px;border:1px dashed #9badc8;border-radius:10px;background:#fff;touch-action:none;cursor:crosshair}
+.status.signed{background:#dff6e9;color:#147642}
+.status.declined{background:#fde4e1;color:#b42318}
+.status.changes_requested{background:#fff0d6;color:#9a5b00}
+.status.expired{background:#eceff4;color:#667085}
+.status.pending{background:#e9efff;color:#2a56bd}
+.done{background:#e9f7ef;border:1px solid #a6dcbc;color:#145c36;border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.7}
+.bad{background:#fde4e1;border:1px solid #f3b3ab;color:#8a1c12;border-radius:12px;padding:14px 16px;font-size:15px;line-height:1.7}
+header{flex-wrap:wrap;gap:12px}
+.site-foot{max-width:1120px;margin:0 auto 32px;padding:0 20px;text-align:center;color:#7b879b;font-size:12px;line-height:1.8}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="eyebrow">SECURE SIGNING</div>
+    <h1>全球化合約管理系統</h1>
+    <p>專屬簽署頁：此連結僅供受邀簽署人使用一次。</p>
+  </div>
+  <span class="demo-badge">一次性連結</span>
+</header>
+<main>
+  <section class="card" id="sign-card">
+    <div class="section-title"><div><span class="step">SIGNING</span><h2 id="sign-title">載入簽署邀請中…</h2></div><span id="sign-expiry" class="status pending" hidden></span></div>
+    <div id="state"></div>
+    <div id="form" hidden>
+      <div class="sign-meta"><span id="sign-role" class="tag"></span><span id="sign-email" class="tag"></span></div>
+      <p id="sign-summary" class="muted"></p>
+      <div class="form-grid" style="grid-template-columns:1fr 1fr">
+        <label>簽署人姓名<input id="sign-name" autocomplete="name" maxlength="80" placeholder="請輸入姓名"></label>
+        <label>備註／原因<input id="sign-reason" maxlength="300" placeholder="退回或拒絕時必填"></label>
+      </div>
+      <div class="sig-wrap"><label>手寫簽名 <small>（確認簽署時必填，可用手指或滑鼠）</small><canvas id="sig" width="640" height="160"></canvas></label>
+        <div class="signature-tools"><span></span><button id="sig-clear" class="secondary" type="button">清除簽名</button></div></div>
+      <label class="consent-row"><input id="sign-consent" type="checkbox"> 我已閱讀合約內容，並同意以電子方式處理本次簽署。</label>
+      <div class="signature-tools">
+        <button id="sign-action">確認簽署</button>
+        <button id="change-action" class="secondary">退回修改</button>
+        <button id="decline-action" style="background:#d92d20">拒絕簽署</button>
+      </div>
+      <p id="sign-result" class="error"></p>
+    </div>
+  </section>
+</main>
+<footer class="site-foot">簽署紀錄由合約管理系統後端（Firebase）保存｜連結使用後立即失效</footer>
+<script src="sign.js"></script>
+</body>
+</html>

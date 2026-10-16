@@ -1,0 +1,1 @@
+{"routes":[{"path":"/","title":"線上簽約示範（管理者）"},{"path":"/#/sign/:token","title":"簽署人專屬簽署頁"},{"path":"/live.html","title":"正式簽約管理台"},{"path":"/sign.html","title":"正式簽署頁"}]}

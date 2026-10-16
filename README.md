@@ -6,6 +6,27 @@ E-ContractApp provides a secure, multi-party contract-signing workflow with emai
 
 E-ContractApp 提供安全的多方合約簽署流程，包含 Email 邀請、每方專屬連結、一次性 Token、簽署期限、到期提醒、拒絕簽署與退回修改。
 
+## Current version／目前版本（2026-10-16d）
+
+**`firebase/` is the production project deployed at <https://mycontractapp-911.web.app>.**
+**`firebase/` 是目前正式上線的完整專案**（Firebase 專案 `mycontractapp-911`），與 [MyContractApp-eSign](https://github.com/SamWang61/MyContractApp-eSign) 的 `firebase/` 相同。`full/` 保留為早期版本。
+
+| 功能 | 說明 |
+|---|---|
+| 兩方／三方簽署 | 簽署、退回修改、拒絕（需填原因）；一次性專屬連結 |
+| 文件上傳 | PDF／DOCX／TXT，擷取文字與 SHA-256 |
+| 翻譯 | 繁體／簡體／英文 |
+| 封面 | 起約方從 6 款封面中選擇 |
+| 合約編號 | `C-YYMM001`，可修改、不可重複、可查詢 |
+| 合約清單與內容頁 | `/contracts`、`/contracts/<編號>` |
+| 簽署方公司資料 | 公司名稱、統一編號（檢查碼驗證）、地址、代表人 |
+| 已簽署 PDF | 封面、條款、立約當事人、手寫簽名、稽核紀錄 |
+| Email | 邀請信、催簽、**完成後自動寄給各方並附 PDF** |
+| 安全規則 | 網頁前端不能直接讀寫資料庫，所有存取經後端 API 驗證 |
+
+**Deploy／部署（Windows）**：雙擊 `firebase\deploy.cmd`（第一次使用前，請依 `firebase/docs/EMAIL_SETUP.md` 設定 `firebase/functions/.env`）。
+變更紀錄見 [CHANGELOG.md](CHANGELOG.md)；Manus 示範站原始碼在 `demo/`。
+
 ## Features／功能
 
 - Per-signer invitation URL and one-time token／每位簽署人獨立連結與一次性 Token
@@ -19,7 +40,9 @@ E-ContractApp 提供安全的多方合約簽署流程，包含 Email 邀請、�
 ## Repository layout／目錄結構
 
 ```text
-full/functions/    Firebase Python API and token state machine／後端 API 與 Token 狀態機
+firebase/          Production project (hosting + functions + rules + deploy script)／正式版完整專案
+demo/              Manus demo site (front-end only)／Manus 示範站
+full/functions/    Early version: Python API and token state machine／早期版本後端
 full/web/          Lightweight invitation and signing UI／前端邀請與公開簽署頁
 docs/              Bilingual architecture, API and security docs／雙語架構、API、安全文件
 tests/             Unit tests／單元測試

@@ -1,0 +1,4 @@
+DroidSansFallbackFull.ttf - Copyright (C) 2008 The Android Open Source Project
+Licensed under the Apache License, Version 2.0: https://www.apache.org/licenses/LICENSE-2.0
+
+DejaVuSans.ttf - DejaVu Fonts License (Bitstream Vera derivative, free to embed and redistribute): https://dejavu-fonts.github.io/License.html

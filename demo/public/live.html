@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>全球化合約管理系統｜正式簽約管理台</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+.live-banner{background:#e9f7ef;border:1px solid #a6dcbc;color:#145c36;border-radius:12px;padding:12px 16px;margin-bottom:20px;font-size:14px;line-height:1.7}
+.live-banner.warn{background:#fff7e0;border-color:#f1d58a;color:#7a5600}
+.live-banner.err{background:#fde4e1;border-color:#f3b3ab;color:#8a1c12}
+.mode-switch{display:flex;gap:10px;flex-wrap:wrap;margin:4px 0 14px}
+.mode-switch label{display:flex;align-items:center;gap:8px;border:1px solid #dce3ee;border-radius:10px;padding:10px 14px;cursor:pointer;font-weight:700;background:#fff}
+.mode-switch input{width:auto;margin:0}
+.signer-rows{display:grid;gap:10px;margin-bottom:6px}
+.signer-row{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:end}
+.party{display:flex;flex-direction:column;gap:10px}
+.party-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.party .role{font-weight:800;font-size:17px}
+.link-box{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:11px;background:#f1f5fb;border:1px solid #dce3ee;border-radius:8px;padding:8px;word-break:break-all;max-height:62px;overflow:hidden;color:#53617a}
+.row-btns{display:flex;gap:8px;flex-wrap:wrap}
+.row-btns a.btn,.row-btns button{font-size:13px;padding:8px 12px}
+a.btn{display:inline-block;background:#2764e8;color:#fff;border-radius:9px;font-weight:700;text-decoration:none}
+a.btn.secondary{background:#edf2fb;color:#172033}
+.status.signed{background:#dff6e9;color:#147642}
+.status.declined{background:#fde4e1;color:#b42318}
+.status.changes_requested{background:#fff0d6;color:#9a5b00}
+.status.expired{background:#eceff4;color:#667085}
+.status.pending,.status.invited{background:#e9efff;color:#2a56bd}
+.status.completed{background:#dff6e9;color:#147642}
+.contract-state{font-size:15px;margin:0 0 14px}
+.history{font-size:13px;line-height:1.9;margin:0;padding-left:18px;color:#53617a}
+.history button{font-size:12px;padding:3px 9px;margin-left:6px}
+.uid{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:#7b879b}
+header{flex-wrap:wrap;gap:12px}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#172033;color:#fff;border-radius:99px;padding:10px 18px;font-size:14px;opacity:0;pointer-events:none;transition:.2s;z-index:50}
+.toast.show{opacity:1}
+.site-foot{max-width:1120px;margin:0 auto 32px;padding:0 20px;text-align:center;color:#7b879b;font-size:12px;line-height:1.8}
+.site-foot a{color:#2764e8}
+@media (max-width:640px){.signer-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <div class="eyebrow">GLOBAL CONTRACT OPERATIONS · LIVE</div>
+    <h1>全球化合約管理系統</h1>
+    <p>正式簽約管理台：連線 Firebase 正式後端，兩方或三方都能簽。</p>
+  </div>
+  <span class="demo-badge" id="conn-badge">連線中…</span>
+</header>
+<main>
+  <div id="conn" class="live-banner warn">正在連線 Firebase（mycontractapp-911）並匿名登入…</div>
+
+  <section class="card">
+    <div class="section-title"><div><span class="step">1 · CONTRACT</span><h2>建立合約並寄送簽署邀請</h2></div></div>
+    <div class="form-grid">
+      <label>合約名稱<input id="c-title" maxlength="120" value="全球服務合作合約"></label>
+      <label>簽署期限<select id="c-days"><option value="3">3 天內</option><option value="7" selected>7 天內</option><option value="14">14 天內</option><option value="30">30 天內</option></select></label>
+      <label>合約摘要<input id="c-summary" maxlength="300" value="雙方／三方合作，依本合約條款執行。"></label>
+    </div>
+    <div class="mode-switch" role="radiogroup" aria-label="簽署方數">
+      <label><input type="radio" name="parties" value="2" checked> 兩方簽署（甲、乙）</label>
+      <label><input type="radio" name="parties" value="3"> 三方簽署（甲、乙、丙）</label>
+    </div>
+    <div id="signer-rows" class="signer-rows"></div>
+    <div class="form-actions">
+      <button id="send" class="big-cta" disabled>建立合約並產生簽署連結</button>
+    </div>
+    <p class="muted" id="send-msg"></p>
+  </section>
+
+  <section class="card" id="track-card" hidden>
+    <div class="section-title"><div><span class="step">2 · TRACK</span><h2 id="track-title">簽署進度</h2></div><span id="contract-status" class="status draft"></span></div>
+    <p id="contract-state" class="contract-state"></p>
+    <div id="parties" class="grid"></div>
+    <p class="legal-note">簽署連結為一次性：簽署、退回或拒絕後立即失效。進度由 Firestore 即時更新，對方在任何裝置上操作，這裡都會同步顯示。</p>
+  </section>
+
+  <section class="card" id="history-card" hidden>
+    <div class="section-title"><div><span class="step">3 · HISTORY</span><h2>這個瀏覽器建立過的合約</h2></div></div>
+    <ol id="history" class="history"></ol>
+  </section>
+</main>
+<footer class="site-foot">正式後端：mycontractapp-911（Firebase）｜登入身分：<span id="uid" class="uid">—</span><br>想先無風險彩排？請用 <a href="./">示範模式</a>（不連線、不寫資料庫）。</footer>
+<div id="toast" class="toast"></div>
+<script type="module" src="live.js"></script>
+</body>
+</html>
