@@ -1,0 +1,36 @@
+# Render Blueprint（選用）：在 Render 選 New → Blueprint 並指定此 repo，即可依此建立服務。
+# 也可以不用 Blueprint，直接 New → Web Service → 選此 repo，Runtime 選 Docker。
+services:
+  - type: web
+    name: mycontractapp
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    region: singapore
+    plan: starter
+    healthCheckPath: /healthz
+    autoDeploy: true
+    envVars:
+      - key: GOOGLE_CLOUD_PROJECT
+        value: mycontractapp-911
+      - key: STORAGE_BUCKET
+        value: mycontractapp-911.firebasestorage.app
+      # 以下為機密，請在 Render 網頁上填入（sync: false 表示不寫在檔案裡）
+      - key: FIREBASE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: SIGNING_TOKEN_ENCRYPTION_KEY
+        sync: false
+      - key: APP_BASE_URL
+        sync: false
+      - key: SMTP_HOST
+        sync: false
+      - key: SMTP_PORT
+        sync: false
+      - key: SMTP_USERNAME
+        sync: false
+      - key: SMTP_PASSWORD
+        sync: false
+      - key: SMTP_FROM
+        sync: false
+      - key: COMPLETION_CC
+        sync: false

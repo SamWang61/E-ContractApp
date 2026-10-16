@@ -2,6 +2,8 @@
 
 > **使用說明手冊**：[firebase/docs/USER_MANUAL.md](firebase/docs/USER_MANUAL.md)（[PDF 版](firebase/docs/USER_MANUAL.pdf)）
 
+> **部署文件**：[部署到 Firebase](firebase/docs/DEPLOY_FIREBASE.md)（[PDF](firebase/docs/DEPLOY_FIREBASE.pdf)）｜[部署到 Render（Docker）](firebase/docs/DEPLOY_RENDER.md)（[PDF](firebase/docs/DEPLOY_RENDER.pdf)）
+
 > 全球化合約管理系統／Global Contract Management System
 
 E-ContractApp provides a secure, multi-party contract-signing workflow with email invitations, per-signer links, one-time tokens, expiry governance, reminders, rejection, and change requests.
